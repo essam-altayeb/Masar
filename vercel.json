@@ -1,0 +1,88 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "npm install --no-audit --no-fund",
+  "buildCommand": "node scripts/build.mjs",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/p",
+      "destination": "/p.html"
+    },
+    {
+      "source": "/p/:token",
+      "destination": "/p.html"
+    },
+    {
+      "source": "/r/:token",
+      "destination": "/r.html"
+    }
+  ],
+  "functions": {
+    "api/admin.js": {
+      "includeFiles": "supabase/schema.sql",
+      "maxDuration": 60
+    },
+    "api/send-email.js": {
+      "includeFiles": "public/assets/altayeb-profile.pdf",
+      "maxDuration": 30
+    },
+    "api/re-files.js": {
+      "maxDuration": 30
+    },
+    "api/re-share.js": {
+      "maxDuration": 20
+    }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    },
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/config.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    }
+  ]
+}
